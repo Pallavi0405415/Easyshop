@@ -11,7 +11,10 @@ import Register from "./pages/Register";
 function App() {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (product) => {
+  // ✅ UPDATED ADD TO CART (FRONTEND + BACKEND)
+  const addToCart = async (product) => {
+
+    // 🔹 FRONTEND CART (your existing logic)
     const existingItem = cart.find(item => item._id === product._id);
 
     if (existingItem) {
@@ -22,6 +25,23 @@ function App() {
       ));
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
+    }
+
+    // 🔹 BACKEND API CALL
+    try {
+      await fetch('http://localhost:5000/api/cart/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: "user123",   // later replace with real user
+          productId: product._id
+        })
+      });
+
+      console.log("Saved to DB ✅");
+
+    } catch (error) {
+      console.error("Backend error:", error);
     }
   };
 
@@ -74,8 +94,6 @@ function App() {
         />
 
         <Route path="/login" element={<Login />} />
-
-        {/* ✅ REQUIRED ADDITION */}
         <Route path="/register" element={<Register />} />
 
       </Routes>
