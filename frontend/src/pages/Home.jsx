@@ -17,7 +17,17 @@ useEffect(() => {
     })
     .catch(err => console.log(err));
 }, []);
+  
+const handleSearch = (e) => {
+  const value = e.target.value;
+  setSearch(value);
 
+  const filtered = products.filter(item =>
+    item.name.toLowerCase().includes(value.toLowerCase())
+  );
+
+  setFilteredProducts(filtered);
+};
   // ✅ Search Function
   const handleSearch = (e) => {
     const value = e.target.value;
