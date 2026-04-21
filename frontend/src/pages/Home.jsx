@@ -9,15 +9,14 @@ const Home = ({ addToCart }) => {
   const [search, setSearch] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  // ✅ Fetch products
-  useEffect(() => {
-    axios.get("https://mini-project-waf-2.onrender.com/api/products")
-      .then(res => {
-        setProducts(res.data);
-        setFilteredProducts(res.data);
-      })
-      .catch(err => console.log(err));
-  }, []);
+useEffect(() => {
+  axios.get("https://mini-project-waf-2.onrender.com/api/products")
+    .then(res => {
+      setProducts(res.data);
+      setFilteredProducts(res.data); // ✅ IMPORTANT
+    })
+    .catch(err => console.log(err));
+}, []);
 
   // ✅ Search Function
   const handleSearch = (e) => {
