@@ -4,28 +4,91 @@ import { useNavigate } from "react-router-dom";
 
 const Home = ({ addToCart }) => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
 
-  // ✅ Fetch from backend
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  // ✅ Fetch products
   useEffect(() => {
-      axios.get("https://mini-project-waf-2.onrender.com/api/products")
-        .then(res => {
-          setProducts(res.data);
-        })
-        .catch(err => console.log(err));
-    }, []);
+    axios.get("https://mini-project-waf-2.onrender.com/api/products")
+      .then(res => {
+        setProducts(res.data);
+        setFilteredProducts(res.data);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  // ✅ Search Function
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    const filtered = products.filter(item =>
+      item.name.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredProducts(filtered);
+  };
 
   return (
     <div style={{ padding: "20px" }}>
+
       <h2 style={{ marginBottom: "20px" }}>Latest Products</h2>
 
+      {/* 🔍 SEARCH BAR */}
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={search}
+        onChange={handleSearch}
+        style={{
+          padding: "10px",
+          width: "100%",
+          marginBottom: "20px",
+          borderRadius: "5px",
+          border: "1px solid #ccc"
+        }}
+      />
+
+      {/* 💡 RECOMMENDATION SECTION */}
+      <h3 style={{ margin: "20px 0" }}>Recommended for You</h3>
+
+      <div style={{
+        display: "flex",
+        gap: "15px",
+        overflowX: "auto",
+        marginBottom: "30px"
+      }}>
+        {products.slice(0, 5).map((item) => (
+          <div
+            key={item._id}
+            style={{
+              minWidth: "150px",
+              border: "1px solid #eee",
+              padding: "10px",
+              borderRadius: "10px",
+              textAlign: "center"
+            }}
+          >
+            <img
+              src={item.image}
+              alt=""
+              style={{ width: "100%", height: "100px", objectFit: "cover" }}
+            />
+            <p>{item.name}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* 🛍 PRODUCT GRID */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",
         gap: "20px"
       }}>
        
-        {products.map((item) => (
+        {filteredProducts.map((item) => (
           <div
             key={item._id}
             style={{
@@ -66,14 +129,16 @@ const Home = ({ addToCart }) => {
               style={{
                 marginTop: "10px",
                 padding: "8px 12px",
-                background: "#4FBBC3",
+                background: "#ff6b6b",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer"
               }}
+              onMouseEnter={(e) => e.target.style.background = "#ff4d4d"}
+              onMouseLeave={(e) => e.target.style.background = "#ff6b6b"}
             >
-              Add to Cart
+              Add to Cart 🛒
             </button>
 
           </div>
