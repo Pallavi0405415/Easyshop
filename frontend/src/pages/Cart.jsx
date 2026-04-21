@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Cart = ({ cart, removeFromCart, increaseQty, decreaseQty }) => {
 
@@ -9,64 +9,82 @@ const Cart = ({ cart, removeFromCart, increaseQty, decreaseQty }) => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Your Cart</h2>
+      <h2>Your Cart 🛒</h2>
 
       {cart.length === 0 ? (
-        <p>No items in cart</p>
+        <h3>Your cart is empty</h3>
       ) : (
-        cart.map((item) => (
-          <div key={item._id} style={{
-            border: "1px solid #ddd",
-            padding: "15px",
-            marginTop: "10px",
-            borderRadius: "10px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
-          }}>
+        <>
+          {cart.map((item) => (
+            <div
+              key={item._id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                border: "1px solid #eee",
+                padding: "10px",
+                margin: "10px 0",
+                borderRadius: "10px"
+              }}
+            >
+              <img
+                src={item.image}
+                alt=""
+                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+              />
 
-            {/* LEFT SIDE */}
-            <div>
               <h4>{item.name}</h4>
+
               <p>₹{item.price}</p>
 
-              <p>
-                ₹{item.price} x {item.quantity} = ₹{item.price * item.quantity}
-              </p>
-
+              {/* ➕➖ Quantity Controls */}
               <div>
-                {/* ✅ FIXED HERE */}
                 <button onClick={() => decreaseQty(item._id)}>-</button>
                 <span style={{ margin: "0 10px" }}>{item.quantity}</span>
                 <button onClick={() => increaseQty(item._id)}>+</button>
               </div>
+
+              <p>₹{item.price * item.quantity}</p>
+
+              {/* ❌ Remove */}
+              <button
+                onClick={() => removeFromCart(item._id)}
+                style={{
+                  background: "red",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 10px",
+                  borderRadius: "5px"
+                }}
+              >
+                Remove
+              </button>
             </div>
+          ))}
 
-            {/* RIGHT SIDE */}
-            <button
-              onClick={() => removeFromCart(item._id)}
-              style={{
-                padding: "5px 10px",
-                background: "red",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              Remove
-            </button>
+          {/* 💰 TOTAL */}
+          <h3 style={{ marginTop: "20px" }}>
+            Total: ₹{totalPrice}
+          </h3>
 
-          </div>
-        ))
+          {/* 🧾 CHECKOUT BUTTON */}
+          <button
+            style={{
+              marginTop: "10px",
+              padding: "10px 20px",
+              background: "green",
+              color: "white",
+              border: "none",
+              borderRadius: "5px"
+            }}
+          >
+            Checkout
+          </button>
+        </>
       )}
-
-      <h3 style={{ marginTop: "20px" }}>
-        Total: ₹{totalPrice}
-      </h3>
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
